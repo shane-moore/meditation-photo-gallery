@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Meditation Photo Gallery</title>
+</head>
+<body>
+    <h1>Meditation Photo Gallery</h1>
+    <div class="overlay">
+        <div class="overlay-inner">
+            <button class="close">x Close</button>
+            <img>
+        </div>
+    </div>
+    <section class="gallery"></section>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            padding: 50px;
+            background: linear-gradient(110deg, rgba(255, 0, 255, 0.3), rgba( 0, 255, 255, 0.8 ));
+        }
+        h1, h2, h3, h4, h5, h6 {
+            margin: 0 0 5px 0;
+        }
+
+        h1 {
+            display: block;
+            width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        p {
+            margin: 0 0 20px 0;
+        }
+        .close {
+            position: absolute;
+            right: 13px;
+            top: 2px;
+            background: none;
+            color: black;
+            border: 0;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 100px);
+            grid-auto-rows: 100px;
+            border: 10px solid greenyellow;
+            grid-auto-flow: dense;
+        }
+        .item {
+            display: grid;
+            grid-template-columns: 1;
+            grid-template-rows: 1;
+            overflow: hidden;
+        }
+
+        .overlay {
+            position: fixed;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           background: rgba(0, 0, 0, 0.3);
+           display: none;
+           z-index: 2;
+        }
+        .overlay.open {
+            display: grid;
+            align-items: center;
+            justify-items: center;
+
+        }
+        .overlay-inner {
+            position: relative;
+            background: white;
+            width: 700px;
+            padding: 20px;
+        }
+        .overlay-inner > img {
+            width: 100%;
+        }
+        .item.h1 {
+            grid-row: span 1;
+        }
+        .item.h2 {
+            grid-row: span 2;
+        }
+        .item.h3 {
+            grid-row: span 3;
+        }
+        .item.h4 {
+            grid-row: span 4;
+        }
+        .item.v1 {
+            grid-column: span 1;
+        }
+        .item.v2 {
+            grid-column: span 2;
+        }
+        .item.v3 {
+            grid-column: span 3;
+        }
+        .item.v4 {
+            grid-column: span 4;
+        }
+        .item img {
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .item__overlay {
+            background: rgba(255,255, 128, 0.7);
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+            transform: translateY(100%);
+            transition: transform 2s;
+        }
+        .item:hover .item__overlay {
+            transform: translateY(0);
+        }
+    </style>
+    <script>
+        // create 50 picture elements using an html generator function that will have an item class and variable h, v classes and a
+        // on click of item -> display fullsize image of item
+        
+        const gallery = document.querySelector('.gallery');
+        const overlay = document.querySelector('.overlay');
+        const close = overlay.querySelector('.close');
+        const img = overlay.querySelector('img');
+        
+        const generateHTML = function([h,v]) {
+            return `
+            <div class="item h${h} v${v}">
+                <img src="images/${randomNumber(13)}.jpg">
+                <button class="item__overlay"> View -> </button>
+            </div>
+            `;
+        }
+        function randomNumber(limit){
+            return Math.floor(Math.random()*limit + 1);
+        }
+        const digits = Array.from( {length: 50}, () => [randomNumber(4), randomNumber(4)]).concat([[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1]]);
+        const itemMarkup = digits.map(generateHTML).join('');
+        console.log(itemMarkup);
+        gallery.innerHTML = itemMarkup;
+
+        const selectedItem = document.querySelectorAll('.item');
+        selectedItem.forEach(item => {
+            item.addEventListener('click', function(e) {
+            let selectedImg= item.querySelector('img');
+            console.log(selectedImg);
+            img.src = selectedImg.src;
+            overlay.style.display = "grid";
+            console.log(overlay);
+            overlay.classList.add('open');
+            })
+        });
+        close.addEventListener( 'click', () => {
+            overlay.classList.remove('open');
+            overlay.style.display = 'none';
+        } )
+    </script>
+</body>
+</html>

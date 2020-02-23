@@ -5,7 +5,7 @@ const imageminMozjpeg = require("imagemin-mozjpeg");
   const files = await imagemin(["images/*.jpg"], {
     destination: "compressed-images",
     plugins: [
-      imageminMozjpeg({quality: 50})
+      imageminMozjpeg({quality: 30})
     ]
   });
 })();
